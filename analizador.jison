@@ -71,5 +71,6 @@ TIPO: entero
 EXPRESION: EXPRESION suma EXPRESION
          | EXPRESION menos EXPRESION
          | EXPRESION multi EXPRESION
+         | EXPRESION div EXPRESION
          | NUMBER
 ;

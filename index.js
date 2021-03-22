@@ -12,7 +12,7 @@ app.use(cors())
 
 app.get('/',(req,res)=>{
     var respuesta={
-        message:"hola mundo"
+        message:"Todo bien"
     }
     res.send(respuesta)
 })
