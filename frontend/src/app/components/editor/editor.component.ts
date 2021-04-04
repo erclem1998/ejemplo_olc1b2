@@ -9,6 +9,7 @@ import {
   MonacoEditorLoaderService,
   MonacoStandaloneCodeEditor
 } from '@materia-ui/ngx-monaco-editor';
+import { AnalizarService } from 'src/app/services/analizar/analizar.service';
 
 @Component({
   selector: 'app-editor',
@@ -27,7 +28,7 @@ export class EditorComponent implements OnInit {
   };
   consoleOptions: MonacoEditorConstructionOptions = {
     theme: 'myCustomTheme',
-    language: 'javascript',
+    language: '',
     roundedSelection: true,
     autoIndent:"full",
     readOnly:true
@@ -38,7 +39,7 @@ export class EditorComponent implements OnInit {
   console = "";
   consola = new FormControl('');
 
-  constructor(private monacoLoaderService: MonacoEditorLoaderService) {
+  constructor(private monacoLoaderService: MonacoEditorLoaderService, private analizarService: AnalizarService) {
     this.monacoLoaderService.isMonacoLoaded$
       .pipe(
         filter(isLoaded => isLoaded),
@@ -77,6 +78,18 @@ export class EditorComponent implements OnInit {
   imprimir(){
     console.log(this.consola.value)
     console.log(this.editorTexto.value)
+  }
+
+  analizar(){
+    var texto = {
+      prueba: this.editorTexto.value
+    }
+    this.analizarService.ejecutar(texto).subscribe((res:any)=>{
+      console.log(res)
+      this.consola.setValue(res.consola);
+    }, err=>{
+      console.log(err)
+    });
   }
 
 }

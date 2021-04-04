@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <button (click)="imprimir()" type="button" class="btn btn-primary">Ejecutar</button>
+                <button (click)="analizar()" type="button" class="btn btn-primary">Ejecutar</button>
             </li>
             <li class="nav-item">
                 <button (click)="imprimir()" type="button" class="btn btn-primary">Arbol AST</button>
@@ -67,14 +67,24 @@
                             <table class="table table-success table-hover">
                                 <thead>
                                     <tr>
-                                        <td>hola</td>
-                                        <td>mundo</td>
+                                        <td>#</td>
+                                        <td>Nombre</td>
+                                        <td>Tipo</td>
+                                        <td>Tipo Dato</td>
+                                        <td>Valor</td>
+                                        <td>Linea</td>
+                                        <td>Columna</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>2</td>
+                                        <td>prueba</td>
+                                        <td>variable</td>
+                                        <td>entero</td>
+                                        <td>55</td>
+                                        <td>1</td>
+                                        <td>1</td>
                                     </tr>
                                 </tbody>
                             </table>
