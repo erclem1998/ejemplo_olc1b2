@@ -30,7 +30,7 @@ class Ambito{
         for(let e=this; e!=null; e=e.anterior){
             var encontrado = e.tablaSimbolos.get(_s.toLowerCase());
             if(encontrado!=null){
-                e.tablaSimbolos.set(_s, _simnbolo)
+                e.tablaSimbolos.set(_s, _simbolo)
                 return true;
             }
         }

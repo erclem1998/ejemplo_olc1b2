@@ -85,27 +85,27 @@ CUERPO: DEC_VAR {$$=$1}
       | AS_VAR {$$=$1}
 ;
 
-AS_VAR: identificador menor menos EXPRESION ptcoma
+AS_VAR: identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $4, this._$.first_line,this._$.first_column+1)}
 ;
 
-DEC_VAR: TIPO identificador ptcoma
-       | TIPO identificador menor menos EXPRESION ptcoma
+DEC_VAR: TIPO identificador ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
+       | TIPO identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $5, $1, this._$.first_line,this._$.first_column+1)}
 ;
 
-TIPO: decimal
+TIPO: decimal {$$ = TIPO_DATO.DECIMAL}
     | cadena
     | bandera
 ;
 
 
 EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.SUMA,this._$.first_line,this._$.first_column+1);}
-         | EXPRESION menos EXPRESION
+         | EXPRESION menos EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.RESTA,this._$.first_line,this._$.first_column+1);}
          | EXPRESION multi EXPRESION
          | EXPRESION div EXPRESION
          | EXPRESION exponente EXPRESION
          | EXPRESION modulo EXPRESION
          | menos EXPRESION %prec umenos
-         | parA EXPRESION parC
+         | parA EXPRESION parC {$$=$2}
          | EXPRESION igualigual EXPRESION
          | EXPRESION diferente EXPRESION
          | EXPRESION menor EXPRESION
@@ -119,7 +119,7 @@ EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3
          | true {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
          | false {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
          | string {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
-         | identificador
+         | identificador {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
 ;
 
 DEC_MET : identificador parA parC llaveA OPCIONESMETODO llaveC

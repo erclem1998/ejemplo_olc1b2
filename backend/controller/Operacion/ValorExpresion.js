@@ -26,6 +26,24 @@ function ValorExpresion(_expresion, _ambito){
             columna: _expresion.columna
         }
     }
+    else if(_expresion.tipo === TIPO_VALOR.IDENTIFICADOR){
+        const simbolo = _ambito.getSimbolo(_expresion.valor)
+        if(simbolo!=null){
+            return {
+                valor: simbolo.valor,
+                tipo: simbolo.tipo,
+                linea: simbolo.linea,
+                columna: simbolo.columna
+            }
+        }
+        return {
+            valor: "Error: la variable '"+_expresion.valor+"' no existe... Linea: "+_expresion.linea+" Columna: "+_expresion.columna,
+            tipo: null,
+            linea: _expresion.linea,
+            columna: _expresion.columna
+        }
+
+    }
     //IDENTIFICADOR
 }
 
