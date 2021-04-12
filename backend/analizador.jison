@@ -93,8 +93,8 @@ DEC_VAR: TIPO identificador ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, 
 ;
 
 TIPO: decimal {$$ = TIPO_DATO.DECIMAL}
-    | cadena
-    | bandera
+    | cadena {$$ = TIPO_DATO.CADENA}
+    | bandera {$$ = TIPO_DATO.BANDERA}
 ;
 
 
@@ -106,18 +106,18 @@ EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3
          | EXPRESION modulo EXPRESION
          | menos EXPRESION %prec umenos
          | parA EXPRESION parC {$$=$2}
-         | EXPRESION igualigual EXPRESION
-         | EXPRESION diferente EXPRESION
-         | EXPRESION menor EXPRESION
+         | EXPRESION igualigual EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.IGUALIGUAL,this._$.first_line,this._$.first_column+1);}
+         | EXPRESION diferente EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.DIFERENTE,this._$.first_line,this._$.first_column+1);}
+         | EXPRESION menor EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MENOR,this._$.first_line,this._$.first_column+1);}
          | EXPRESION menorigual EXPRESION
-         | EXPRESION mayor EXPRESION
-         | EXPRESION mayorigual EXPRESION
-         | EXPRESION or EXPRESION
-         | EXPRESION and EXPRESION
+         | EXPRESION mayor EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MAYOR,this._$.first_line,this._$.first_column+1);}
+         | EXPRESION mayorigual EXPRESION 
+         | EXPRESION or EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.OR,this._$.first_line,this._$.first_column+1);}
+         | EXPRESION and EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.AND,this._$.first_line,this._$.first_column+1);}
          | not EXPRESION
          | NUMBER {$$ = INSTRUCCION.nuevoValor(Number($1), TIPO_VALOR.DECIMAL, this._$.first_line,this._$.first_column+1)}
-         | true {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
-         | false {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
+         | true {$$ = INSTRUCCION.nuevoValor(($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
+         | false {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
          | string {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
          | identificador {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
 ;
@@ -133,18 +133,18 @@ LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
 PARAMETROS: TIPO identificador
 ;
 
-OPCIONESMETODO: OPCIONESMETODO CUERPOMETODO
-              | CUERPOMETODO
+OPCIONESMETODO: OPCIONESMETODO CUERPOMETODO  {$1.push($2); $$=$1;}
+              | CUERPOMETODO {$$=[$1];}
 ;
 
-CUERPOMETODO: DEC_VAR
-            | IMPRIMIR
-            | WHILE
-            | AS_VAR
+CUERPOMETODO: DEC_VAR {$$=$1}
+            | WHILE {$$=$1}
+            | IMPRIMIR {$$=$1}
+            | AS_VAR {$$=$1}
 ;
 
 IMPRIMIR: cout menor menor EXPRESION ptcoma{$$ = new INSTRUCCION.nuevoCout($4, this._$.first_line,this._$.first_column+1)}
 ;
 
-WHILE: while parA EXPRESION parC llaveA OPCIONESMETODO llaveC
+WHILE: while parA EXPRESION parC llaveA OPCIONESMETODO llaveC {$$ = new INSTRUCCION.nuevoWhile($3, $6 , this._$.first_line,this._$.first_column+1)}
 ;

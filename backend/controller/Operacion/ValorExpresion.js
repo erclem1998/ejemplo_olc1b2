@@ -12,7 +12,7 @@ function ValorExpresion(_expresion, _ambito){
     }
     else if(_expresion.tipo === TIPO_VALOR.BANDERA){
         return {
-            valor: Boolean(_expresion.valor),
+            valor: _expresion.valor.toLowerCase()==='true' ? true: false,
             tipo: TIPO_DATO.BANDERA,
             linea: _expresion.linea,
             columna: _expresion.columna
