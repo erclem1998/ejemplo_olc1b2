@@ -15,6 +15,8 @@
 "false"               return 'false'
 "cout"               return 'cout'
 "while"               return 'while'
+"exec"               return 'exec'
+"if"               return 'if'
 
 
 "||"                   return 'or'
@@ -79,10 +81,15 @@ OPCIONESCUERPO: OPCIONESCUERPO CUERPO {$1.push($2); $$=$1;}
 ;
 
 CUERPO: DEC_VAR {$$=$1}
-      | WHILE {$$=$1}
-      | IMPRIMIR {$$=$1}
       | DEC_MET {$$=$1}
       | AS_VAR {$$=$1}
+      | EXEC {$$=$1}
+;
+
+EXEC: exec identificador parA parC ptcoma {$$ = INSTRUCCION.nuevoExec($2, null, this._$.first_line,this._$.first_column+1)}
+;
+
+LLAMADA_METODO: identificador parA parC ptcoma {$$ = INSTRUCCION.nuevaLlamada($1, null, this._$.first_line,this._$.first_column+1)}
 ;
 
 AS_VAR: identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $4, this._$.first_line,this._$.first_column+1)}
@@ -122,7 +129,7 @@ EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3
          | identificador {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
 ;
 
-DEC_MET : identificador parA parC llaveA OPCIONESMETODO llaveC
+DEC_MET : identificador parA parC llaveA OPCIONESMETODO llaveC {$$ = INSTRUCCION.nuevoMetodo($1, null, $5, this._$.first_line,this._$.first_column+1)}
         | identificador parA LISTAPARAMETROS parC llaveA OPCIONESMETODO llaveC
 ;
 
@@ -141,10 +148,15 @@ CUERPOMETODO: DEC_VAR {$$=$1}
             | WHILE {$$=$1}
             | IMPRIMIR {$$=$1}
             | AS_VAR {$$=$1}
+            | LLAMADA_METODO {$$=$1}
+            | IF {$$=$1}
 ;
 
 IMPRIMIR: cout menor menor EXPRESION ptcoma{$$ = new INSTRUCCION.nuevoCout($4, this._$.first_line,this._$.first_column+1)}
 ;
 
 WHILE: while parA EXPRESION parC llaveA OPCIONESMETODO llaveC {$$ = new INSTRUCCION.nuevoWhile($3, $6 , this._$.first_line,this._$.first_column+1)}
+;
+
+IF: if parA EXPRESION parC llaveA OPCIONESMETODO llaveC {$$ = new INSTRUCCION.nuevoIf($3, $6 , this._$.first_line,this._$.first_column+1)}
 ;

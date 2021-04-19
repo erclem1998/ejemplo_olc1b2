@@ -1,5 +1,6 @@
 const Ambito = require("../controller/Ambito/Ambito")
 const Bloque = require("../controller/Instruccion/Bloque")
+const Global = require("../controller/Instruccion/Global")
 
 module.exports=(parser, app)=>{
     app.post('/analizar',(req,res)=>{
@@ -7,7 +8,8 @@ module.exports=(parser, app)=>{
         //try {
             var ast = parser.parse(prueba)
             const AmbitoGlobal = new Ambito(null)
-            var cadena = Bloque(ast, AmbitoGlobal)
+            //var cadena = Bloque(ast, AmbitoGlobal)
+            var cadena = Global(ast, AmbitoGlobal)
             var resultado = {
                 arbol: ast,
                 consola: cadena

@@ -2,10 +2,15 @@ class Ambito{
     constructor(_anterior){
         this.anterior = _anterior
         this.tablaSimbolos = new Map();
+        this.tablaMetodos = new Map();
     }
 
     addSimbolo(_s, _simbolo){
         this.tablaSimbolos.set(_s.toLowerCase(), _simbolo)
+    }
+    
+    addMetodo(_s, _metodo){
+        this.tablaMetodos.set(_s.toLowerCase(), _metodo)
     }
 
     getSimbolo(_s){ //(hola, clase simbolo)
@@ -17,9 +22,28 @@ class Ambito{
         }
         return null
     }
+
+    getMetodo(_s){ //(hola, clase simbolo)
+        for(let e=this; e!=null; e=e.anterior){
+            var encontrado = e.tablaMetodos.get(_s.toLowerCase()) //hola<=>HoLA
+            if(encontrado!=null){
+                return encontrado
+            }
+        }
+        return null
+    }
     existeSimbolo(_s){
         for(let e=this; e!=null; e=e.anterior){
             var encontrado = e.tablaSimbolos.get(_s.toLowerCase()) //hola<=>HoLA
+            if(encontrado!=null){
+                return true
+            }
+        }
+        return false
+    }
+    existeMetodo(_s){
+        for(let e=this; e!=null; e=e.anterior){
+            var encontrado = e.tablaMetodos.get(_s.toLowerCase()) //hola<=>HoLA
             if(encontrado!=null){
                 return true
             }
