@@ -87,9 +87,15 @@ CUERPO: DEC_VAR {$$=$1}
 ;
 
 EXEC: exec identificador parA parC ptcoma {$$ = INSTRUCCION.nuevoExec($2, null, this._$.first_line,this._$.first_column+1)}
+    | exec identificador parA LISTAVALORES parC ptcoma {$$ = INSTRUCCION.nuevoExec($2, $4, this._$.first_line,this._$.first_column+1)}
 ;
 
 LLAMADA_METODO: identificador parA parC ptcoma {$$ = INSTRUCCION.nuevaLlamada($1, null, this._$.first_line,this._$.first_column+1)}
+              | identificador parA LISTAVALORES parC ptcoma {$$ = INSTRUCCION.nuevaLlamada($1, $3, this._$.first_line,this._$.first_column+1)}
+;
+
+LISTAVALORES: LISTAVALORES coma EXPRESION {$1.push($3); $$=$1}
+            | EXPRESION {$$=[$1]}
 ;
 
 AS_VAR: identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $4, this._$.first_line,this._$.first_column+1)}
@@ -130,14 +136,14 @@ EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3
 ;
 
 DEC_MET : identificador parA parC llaveA OPCIONESMETODO llaveC {$$ = INSTRUCCION.nuevoMetodo($1, null, $5, this._$.first_line,this._$.first_column+1)}
-        | identificador parA LISTAPARAMETROS parC llaveA OPCIONESMETODO llaveC
+        | identificador parA LISTAPARAMETROS parC llaveA OPCIONESMETODO llaveC {$$ = INSTRUCCION.nuevoMetodo($1, $3, $6, this._$.first_line,this._$.first_column+1)}
 ;
 
-LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
-               | PARAMETROS
+LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS {$1.push($3); $$=$1;}
+               | PARAMETROS {$$=[$1];}
 ;
 
-PARAMETROS: TIPO identificador
+PARAMETROS: TIPO identificador {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
 ;
 
 OPCIONESMETODO: OPCIONESMETODO CUERPOMETODO  {$1.push($2); $$=$1;}
