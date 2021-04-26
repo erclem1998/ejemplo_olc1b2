@@ -6,7 +6,8 @@ const TIPO_INSTRUCCION = {
     DEC_METODO: 'DEC_METODO',
     EXEC: 'EXEC',
     LLAMADA_METODO: 'LLAMADA_METODO',
-    IF: 'IF'
+    IF: 'IF',
+    BREAK: 'BREAK'
 }
 
 module.exports = TIPO_INSTRUCCION

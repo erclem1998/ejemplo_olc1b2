@@ -7,7 +7,14 @@ const CicloWhile = require("./While");
 
 function Bloque(_instrucciones, _ambito){
     var cadena = ""
+    var hayBreak = false;
     _instrucciones.forEach(instruccion => {
+        if(hayBreak){
+            return{
+                hayBreak: hayBreak,
+                cadena: cadena
+            }
+        }
         if(instruccion.tipo === TIPO_INSTRUCCION.COUT){
             cadena+=Cout(instruccion, _ambito)+'\n'
         }
@@ -25,6 +32,7 @@ function Bloque(_instrucciones, _ambito){
         }
         else if(instruccion.tipo === TIPO_INSTRUCCION.WHILE){
             var mensaje = CicloWhile(instruccion, _ambito)
+            hayBreak = false
             if(mensaje!=null){
                 cadena+=mensaje+'\n'
             }
@@ -37,13 +45,26 @@ function Bloque(_instrucciones, _ambito){
             }
         }
         else if(instruccion.tipo === TIPO_INSTRUCCION.IF){
-            var mensaje = SentenciaIf(instruccion, _ambito)
+            var ejec = SentenciaIf(instruccion, _ambito)
+            var mensaje = ejec.cadena
+            hayBreak = ejec.hayBreak
             if(mensaje!=null){
                 cadena+=mensaje
             }
         }
+        else if(instruccion.tipo === TIPO_INSTRUCCION.BREAK){
+            hayBreak = true
+            return {
+                hayBreak: hayBreak,
+                cadena: cadena
+            }
+        }
     });
-    return cadena
+    return{
+        hayBreak: hayBreak,
+        cadena: cadena
+    }
+    //return cadena
 }
 
 module.exports = Bloque

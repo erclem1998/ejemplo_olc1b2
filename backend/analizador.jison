@@ -17,6 +17,7 @@
 "while"               return 'while'
 "exec"               return 'exec'
 "if"               return 'if'
+"break"               return 'break'
 
 
 "||"                   return 'or'
@@ -156,6 +157,7 @@ CUERPOMETODO: DEC_VAR {$$=$1}
             | AS_VAR {$$=$1}
             | LLAMADA_METODO {$$=$1}
             | IF {$$=$1}
+            | BREAK {$$=$1}
 ;
 
 IMPRIMIR: cout menor menor EXPRESION ptcoma{$$ = new INSTRUCCION.nuevoCout($4, this._$.first_line,this._$.first_column+1)}
@@ -165,4 +167,7 @@ WHILE: while parA EXPRESION parC llaveA OPCIONESMETODO llaveC {$$ = new INSTRUCC
 ;
 
 IF: if parA EXPRESION parC llaveA OPCIONESMETODO llaveC {$$ = new INSTRUCCION.nuevoIf($3, $6 , this._$.first_line,this._$.first_column+1)}
+;
+
+BREAK: break ptcoma {$$ = new INSTRUCCION.nuevoBreak(this._$.first_line,this._$.first_column+1)}
 ;

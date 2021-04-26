@@ -6,6 +6,7 @@ const Instruccion = require("./Instruccion")
 function Exec(_instruccion, _ambito) {
     var cadena = ""
     var metodoEjecutar = _ambito.getMetodo(_instruccion.nombre)
+    //console.log(metodoEjecutar.instrucciones)
     if (metodoEjecutar != null) {
         var nuevoAmbito = new Ambito(_ambito)
         //verificamos si es un metodo con parametros
@@ -23,11 +24,17 @@ function Exec(_instruccion, _ambito) {
                         cadena += mensaje + '\n'
                     }
                 }
-                if (error){
+                if (error) {
                     return cadena
                 }
                 //console.log(nuevoAmbito)
-                return Bloque(metodoEjecutar.instrucciones, nuevoAmbito) 
+                var ejec = Bloque(metodoEjecutar.instrucciones, nuevoAmbito)
+                var mensaje = ejec.cadena
+                if (ejec.hayBreak) {
+                    mensaje += `Error: Se ha encontrado un break fuera de un ciclo`
+                }
+                return mensaje
+                //return Bloque(metodoEjecutar.instrucciones, nuevoAmbito) 
                 //return cadena;
             }
             else {
@@ -35,7 +42,12 @@ function Exec(_instruccion, _ambito) {
             }
         }
         else {
-            return Bloque(metodoEjecutar.instrucciones, nuevoAmbito)
+            var ejec = Bloque(metodoEjecutar.instrucciones, nuevoAmbito)
+            var mensaje = ejec.cadena
+            if (ejec.hayBreak) {
+                mensaje += `Error: Se ha encontrado un break fuera de un ciclo`
+            }
+            return mensaje
         }
     }
     return `Error: El método ${_instruccion.nombre} no existe... Linea: ${_instruccion.linea} Columna: ${_instruccion.columna}`

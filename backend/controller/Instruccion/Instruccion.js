@@ -92,6 +92,13 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+    nuevoBreak: function(_linea, _columna){
+        return {
+            tipo: TIPO_INSTRUCCION.BREAK,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 
