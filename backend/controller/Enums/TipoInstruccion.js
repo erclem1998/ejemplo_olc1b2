@@ -7,6 +7,9 @@ const TIPO_INSTRUCCION = {
     EXEC: 'EXEC',
     LLAMADA_METODO: 'LLAMADA_METODO',
     IF: 'IF',
+    IFCE: 'IFCE',
+    IFCEIF: 'IFCEIF',
+    ELSEIF: 'ELSEIF',
     BREAK: 'BREAK'
 }
 

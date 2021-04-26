@@ -3,6 +3,8 @@ const Asignacion = require("./Asignacion");
 const Cout = require("./Cout");
 const Declaracion = require("./Declaracion");
 const SentenciaIf = require("./If");
+const SentenciaIfElse = require("./IfElse");
+const SentenciaIfElseIf = require("./IfElseIf");
 const CicloWhile = require("./While");
 
 function Bloque(_instrucciones, _ambito){
@@ -46,6 +48,22 @@ function Bloque(_instrucciones, _ambito){
         }
         else if(instruccion.tipo === TIPO_INSTRUCCION.IF){
             var ejec = SentenciaIf(instruccion, _ambito)
+            var mensaje = ejec.cadena
+            hayBreak = ejec.hayBreak
+            if(mensaje!=null){
+                cadena+=mensaje
+            }
+        }
+        else if(instruccion.tipo === TIPO_INSTRUCCION.IFCE){
+            var ejec = SentenciaIfElse(instruccion, _ambito)
+            var mensaje = ejec.cadena
+            hayBreak = ejec.hayBreak
+            if(mensaje!=null){
+                cadena+=mensaje
+            }
+        }
+        else if(instruccion.tipo === TIPO_INSTRUCCION.IFCEIF){
+            var ejec = SentenciaIfElseIf(instruccion, _ambito)
             var mensaje = ejec.cadena
             hayBreak = ejec.hayBreak
             if(mensaje!=null){
